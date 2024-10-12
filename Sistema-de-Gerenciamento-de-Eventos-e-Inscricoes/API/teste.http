@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:5136
+
+### Registrar Usuário
+POST {{baseUrl}}/sistema/register
+Content-Type: application/json
+
+{
+    "Nome": "John",
+    "Email": "john@gmail.com",
+    "Senha": "123456",
+    "Perfil": "Organizador"
+}
+
+### Deletar Usuário
+DELETE {{baseUrl}}/sistema/delete/
