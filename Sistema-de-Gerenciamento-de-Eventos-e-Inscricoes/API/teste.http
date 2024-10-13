@@ -13,3 +13,32 @@ Content-Type: application/json
 
 ### Deletar Usuário
 DELETE {{baseUrl}}/sistema/delete/
+
+### Atualizar Usuário
+PUT {{baseUrl}}/sistema/atualizar_cadastro/1
+Content-Type: application/json
+
+{
+    "Nome": "John Chappell",
+    "Email": "john_atualizado@gmail.com",
+    "Senha": "123456Atualizado"
+}
+
+### Criar Evento
+POST {{baseUrl}}/sistema/criar_evento
+Content-Type: application/json
+
+{
+    "Nome": "Evento Teste ",
+    "Descricao": "Descrição Teste",
+    "DataEvento": "2021-12-12T00:00:00",
+    "Proprietario": {
+        "Id": 1
+    }
+}
+
+### Remover Evento
+DELETE {{baseUrl}}/sistema/deletar_evento/
+
+### Listar Eventos
+GET {{baseUrl}}/sistema/listar_eventos
