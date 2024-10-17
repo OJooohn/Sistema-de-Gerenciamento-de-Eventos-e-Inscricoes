@@ -1,41 +1,45 @@
 using API.Enums;
 using API.Models;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 // Use estes comandos para resetar o auto incrementos das tabelas
 // UPDATE sqlite_sequence SET seq = 0 WHERE name = 'Usuarios';
 // UPDATE sqlite_sequence SET seq = 0 WHERE name = 'Eventos';
+// UPDATE sqlite_sequence SET seq = 0 WHERE name = 'Inscricoes';
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContex>();
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello, Minimal API!");
+app.MapGet("/", () => "Sistema de Gerenciamento de Eventos e Inscricoes");
 
-app.MapPost("/sistema/register", ([FromBody] Usuario usuario, [FromServices] AppDbContex ctx) => {
+// Registrar Usuário
+app.MapPost("/sistema/usuario/registrar", async ([FromBody] Usuario usuario, [FromServices] AppDbContex ctx) => {
 
-    ctx.Add(usuario);
-    ctx.SaveChanges();
+    ctx.Usuarios.Add(usuario);
+    await ctx.SaveChangesAsync();
+
     return Results.Created("", usuario);
 
 });
 
-app.MapDelete("/sistema/delete/{id}", (int id, [FromServices] AppDbContex ctx) => {
+// Deletar Usuário
+app.MapDelete("/sistema/usuario/deletar/{id}", async (int id, [FromServices] AppDbContex ctx) => {
 
     Usuario? usuario = ctx.Usuarios.Find(id);
     if (usuario == null)
         return Results.NotFound();
     
-    ctx.Remove(usuario);
-    ctx.SaveChanges();
-    return Results.Ok("Usuário deletado com sucesso!");
+    ctx.Usuarios.Remove(usuario);
+    await ctx.SaveChangesAsync();
+
+    return Results.Ok(usuario);
 
 });
 
 // Atualizar Usuário
-app.MapPut("/sistema/atualizar_cadastro/{id}", (int id, [FromBody] Usuario cadastroAtualizado, [FromServices] AppDbContex ctx) => {
+app.MapPut("/sistema/usuario/atualizar/{id}", async (int id, [FromBody] Usuario cadastroAtualizado, [FromServices] AppDbContex ctx) => {
 
     Usuario? usuario = ctx.Usuarios.Find(id);
     if (usuario == null)
@@ -45,54 +49,138 @@ app.MapPut("/sistema/atualizar_cadastro/{id}", (int id, [FromBody] Usuario cadas
     usuario.Email = cadastroAtualizado.Email;
     usuario.Senha = cadastroAtualizado.Senha;
 
-    ctx.Update(usuario);
-    ctx.SaveChanges();
-    return Results.Ok("Cadastro atualizado com sucesso!");
+    ctx.Usuarios.Update(usuario);
+    await ctx.SaveChangesAsync();
+
+    return Results.Ok(usuario);
 
 });
 
 // Criar Evento
-app.MapPost("/sistema/criar_evento", ([FromBody] Evento evento, [FromServices] AppDbContex ctx) => {
+app.MapPost("/sistema/evento/criar", async ([FromBody] Evento evento, [FromServices] AppDbContex ctx) => {
     
-    if (evento.Proprietario == null || evento.Proprietario.Id == 0)
-        return Results.BadRequest("Proprietário não informado.");
-    
-    Usuario? usuario = ctx.Usuarios.Find(evento.Proprietario.Id);
+    Usuario? proprietario = ctx.Usuarios.Find(evento.ProprietarioId);
 
-    if (usuario == null)
+    if (proprietario == null)
         return Results.NotFound("Usuário não encontrado.");
     
-    evento.Proprietario = usuario;
-
-    if (usuario.Perfil != PerfilEnum.Organizador)
+    if (proprietario.Perfil != PerfilEnum.Organizador)
         return Results.BadRequest("Usuário não é um organizador.");
 
-    ctx.Add(evento);
-    ctx.SaveChanges();
+    evento.Proprietario = proprietario;
+
+    ctx.Eventos.Add(evento);
+    await ctx.SaveChangesAsync();
+    
     return Results.Created("", evento);
 
-});
+}); 
 
 // Deletar Evento
-app.MapDelete("/sistema/deletar_evento/{id}", (int id, [FromServices] AppDbContex ctx) => {
+app.MapDelete("/sistema/evento/excluir/{id}", async (int id, [FromServices] AppDbContex ctx) => {
 
     Evento? evento = ctx.Eventos.Find(id);
 
     if (evento == null)
         return Results.NotFound();
 
-    ctx.Remove(evento);
-    ctx.SaveChanges();
-    return Results.Ok("Evento deletado com sucesso!");
+    ctx.Eventos.Remove(evento);
+    await ctx.SaveChangesAsync();
+
+    return Results.Ok(evento);
 
 });
 
 // Listar Eventos
-app.MapGet("/sistema/listar_eventos", ([FromServices] AppDbContex ctx) => {
+app.MapGet("/sistema/evento/listar", ([FromServices] AppDbContex ctx) => {
+
+    List<Evento> eventos = ctx.Eventos.Include(e => e.Proprietario).ToList();
 
     if(ctx.Eventos.Any())
-        return Results.Ok(ctx.Eventos.ToList());
+        return Results.Ok(eventos);
+
     return Results.NotFound("Nenhum evento encontrado.");
+
+});
+
+// Inscrever-se em um evento
+app.MapPost("/sistema/evento/inscrever", async ([FromBody] Inscricao inscricao, [FromServices] AppDbContex ctx) => {
+
+    Evento? evento = ctx.Eventos.Find(inscricao.EventoId);
+    if (evento == null)
+        return Results.NotFound("Evento não encontrado.");
+
+    Usuario? usuario = ctx.Usuarios.Find(inscricao.UsuarioId);
+    if (usuario == null)
+        return Results.NotFound("Usuário não encontrado.");
+
+    if (evento.DataEvento < DateTime.Now)
+        return Results.BadRequest("Evento já ocorreu.");
+    
+    int inscricoes = ctx.Inscricoes.Count(i => i.EventoId == evento.Id);
+    if (inscricoes >= evento.VagasMaximo)
+        return Results.BadRequest("Evento lotado.");
+    
+    bool usuario_inscrito = ctx.Inscricoes.FirstOrDefault(i => i.EventoId == evento.Id && i.UsuarioId == usuario.Id) != null;
+    if (usuario_inscrito)
+        return Results.BadRequest("Usuário já inscrito no evento.");
+
+    inscricao.Evento = evento;
+    inscricao.Usuario = usuario;
+
+    ctx.Inscricoes.Add(inscricao);
+    await ctx.SaveChangesAsync();
+
+    return Results.Created("", inscricao);
+
+});
+
+// Cancelar inscrição em um evento
+app.MapDelete("/sistema/evento/cancelar-inscricao/{id}", async (int id, [FromServices] AppDbContex ctx) => {
+
+    Inscricao? inscricao = ctx.Inscricoes.Find(id);
+
+    if (inscricao == null)
+        return Results.NotFound("Innscrição não encontrada.");
+    
+    ctx.Inscricoes.Remove(inscricao);
+    await ctx.SaveChangesAsync();
+
+    return Results.Ok(inscricao);
+
+});
+
+// Listar inscrições de um evento
+app.MapGet("/sistema/evento/listar-inscritos/{id}", (int id, [FromServices] AppDbContex ctx) => {
+
+    Evento? evento = ctx.Eventos.Find(id);
+
+    if (evento == null)
+        return Results.NotFound("Evento não encontrado.");
+
+    List<Inscricao> inscricoes = ctx.Inscricoes.Include(i => i.Usuario).Include(i => i.Evento.Proprietario).Where(i => i.EventoId == id).ToList();
+
+    if (inscricoes.Any())
+        return Results.Ok(inscricoes);
+
+    return Results.NotFound("Nenhuma inscrição encontrada.");
+
+});
+
+// Listar inscrições de um usuário
+app.MapGet("/sistema/usuario/listar-inscricoes/{id}", (int id, [FromServices] AppDbContex ctx) => {
+
+    Usuario? usuario = ctx.Usuarios.Find(id);
+
+    if (usuario == null)
+        return Results.NotFound("Usuário não encontrado.");
+
+    List<Inscricao> inscricoes = ctx.Inscricoes.Include(i => i.Usuario).Include(i => i.Evento.Proprietario).Where(i => id == i.UsuarioId).ToList();
+
+    if (inscricoes.Any())
+        return Results.Ok(inscricoes);
+
+    return Results.NotFound("Nenhuma inscrição encontrada.");
 
 });
 

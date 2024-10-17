@@ -3,6 +3,7 @@ using System;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContex))]
-    partial class AppDbContexModelSnapshot : ModelSnapshot
+    [Migration("20241014223214_AddVagasMaxEventos")]
+    partial class AddVagasMaxEventos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -32,7 +35,7 @@ namespace API.Migrations
                     b.Property<string>("Nome")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProprietarioId")
+                    b.Property<int?>("ProprietarioId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("VagasMaximo")
@@ -51,10 +54,10 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EventoId")
+                    b.Property<int?>("EventoId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UsuarioId")
+                    b.Property<int?>("UsuarioId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -93,9 +96,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Usuario", "Proprietario")
                         .WithMany()
-                        .HasForeignKey("ProprietarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProprietarioId");
 
                     b.Navigation("Proprietario");
                 });
@@ -104,15 +105,11 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Evento", "Evento")
                         .WithMany()
-                        .HasForeignKey("EventoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventoId");
 
                     b.HasOne("API.Models.Usuario", "Usuario")
                         .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UsuarioId");
 
                     b.Navigation("Evento");
 
