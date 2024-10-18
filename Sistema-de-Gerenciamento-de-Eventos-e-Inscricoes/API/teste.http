@@ -1,5 +1,12 @@
 @baseUrl = http://localhost:5136/sistema
 
+### Listar Usuários
+GET {{baseUrl}}/usuario/listar
+
+###
+// Consultar pelo campo de email
+GET {{baseUrl}}/usuario/buscar/ 
+
 ### Registrar Usuário
 POST {{baseUrl}}/usuario/registrar
 Content-Type: application/json
@@ -8,6 +15,8 @@ Content-Type: application/json
     "Nome": "John",
     "Email": "john@gmail.com",
     "Senha": "123456",
+    // Campo de perfil será informado futuramente através de um seletor
+    // no frontend, não precisando de validação
     "Perfil": "Organizador"
 }
 
@@ -15,7 +24,7 @@ Content-Type: application/json
 DELETE {{baseUrl}}/usuario/deletar/
 
 ### Atualizar Usuário
-PUT {{baseUrl}}/usuario/atualizar/
+PUT {{baseUrl}}/usuario/atualizar/1
 Content-Type: application/json
 
 {
@@ -32,7 +41,7 @@ Content-Type: application/json
     "Nome": "Evento",
     "Descricao": "Descrição do evento",
     "DataEvento": "2024-12-12T00:00:00",
-    "ProprietarioId": 1,
+    "ProprietarioId": 3,
     "VagasMaximo": 1
 }
 

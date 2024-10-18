@@ -14,28 +14,98 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Sistema de Gerenciamento de Eventos e Inscricoes");
 
-// Registrar Usuário
-app.MapPost("/sistema/usuario/registrar", async ([FromBody] Usuario usuario, [FromServices] AppDbContex ctx) => {
+// Listar Usuários
+app.MapGet("/sistema/usuario/listar", async ([FromServices] AppDbContex ctx) =>
+{
+    var usuarios = await ctx.Usuarios.ToListAsync();
 
-    ctx.Usuarios.Add(usuario);
-    await ctx.SaveChangesAsync();
+    if (usuarios == null)
+    {
+        return Results.NotFound("Nenhum usuário encontrado.");
+    }
 
-    return Results.Created("", usuario);
-
+    return Results.Ok(usuarios);
 });
+
+// Buscar Usuário
+app.MapGet("/sistema/usuario/buscar/{email}", async ([FromRoute] string? email, [FromServices] AppDbContex ctx) => {
+    if (string.IsNullOrWhiteSpace(email))
+    {
+        return Results.BadRequest(new { mensagem = "Não foi possível consultar usuário: Erro ao receber 'Email' pela url." });
+    }
+
+    var usuario = await ctx.Usuarios.FirstOrDefaultAsync(x => x.Email == email);
+
+    if (usuario == null)
+    {
+        return Results.NotFound("Usuário não encontrado.");
+    }
+
+    return Results.Ok(usuario);
+});
+
+// Registrar Usuário
+app.MapPost("/sistema/usuario/registrar", async ([FromBody] Usuario usuario, [FromServices] AppDbContex ctx) =>
+{
+    // VALIDAÇÃO DOS CAMPOS
+    if (string.IsNullOrWhiteSpace(usuario.Nome))
+    {
+        return Results.BadRequest(new { mensagem = "O campo 'Nome' é obrigatório." });
+    }
+
+    if (string.IsNullOrWhiteSpace(usuario.Email))
+    {
+        return Results.BadRequest(new { mensagem = "O campo 'Email' é obrigatório." });
+    }
+
+    if (string.IsNullOrWhiteSpace(usuario.Senha))
+    {
+        return Results.BadRequest(new { mensagem = "O campo 'Senha' é obrigatório." });
+    }
+
+    // VERIFICA SE O EMAIL JÁ ESTÁ CADASTRADO
+    var emailExiste = await ctx.Usuarios.AnyAsync(u => u.Email == usuario.Email);
+    if (emailExiste)
+    {
+        return Results.BadRequest(new { mensagem = "O email fornecido já está cadastrado." });
+    }
+
+    try
+    {
+        ctx.Usuarios.Add(usuario);
+        await ctx.SaveChangesAsync();
+    }
+    catch (Exception e)
+    {
+        return Results.Problem(detail: e.Message);
+    }
+
+    // CONSULTA E RETORNA A LISTA DE USUÁRIOS ATUALIZADA
+    var usuarios = await ctx.Usuarios.ToListAsync();
+    return Results.Ok(usuarios);
+});
+
 
 // Deletar Usuário
 app.MapDelete("/sistema/usuario/deletar/{id}", async (int id, [FromServices] AppDbContex ctx) => {
 
     Usuario? usuario = ctx.Usuarios.Find(id);
     if (usuario == null)
-        return Results.NotFound();
+        return Results.NotFound("Usuário não encontrado.");
     
-    ctx.Usuarios.Remove(usuario);
-    await ctx.SaveChangesAsync();
+    try
+    {
+        ctx.Usuarios.Remove(usuario);
+        await ctx.SaveChangesAsync();
+    }
+    catch (Exception e)
+    {
+        return Results.Problem(detail: e.Message);
+    }
 
-    return Results.Ok(usuario);
+    var usuarios = await ctx.Usuarios.ToListAsync();
 
+    return Results.Ok(usuarios);
 });
 
 // Atualizar Usuário
@@ -45,62 +115,120 @@ app.MapPut("/sistema/usuario/atualizar/{id}", async (int id, [FromBody] Usuario 
     if (usuario == null)
         return Results.NotFound();
 
+    // VALIDAÇÃO DOS CAMPOS
+    if (string.IsNullOrWhiteSpace(cadastroAtualizado.Nome))
+    {
+        return Results.BadRequest(new { mensagem = "O campo 'Nome' é obrigatório." });
+    }
+
+    if (string.IsNullOrWhiteSpace(cadastroAtualizado.Email))
+    {
+        return Results.BadRequest(new { mensagem = "O campo 'Email' é obrigatório." });
+    }
+
+    if (string.IsNullOrWhiteSpace(cadastroAtualizado.Senha))
+    {
+        return Results.BadRequest(new { mensagem = "O campo 'Senha' é obrigatório." });
+    }
+
     usuario.Nome = cadastroAtualizado.Nome;
     usuario.Email = cadastroAtualizado.Email;
     usuario.Senha = cadastroAtualizado.Senha;
 
-    ctx.Usuarios.Update(usuario);
-    await ctx.SaveChangesAsync();
+    try
+    {
+        ctx.Usuarios.Update(usuario);
+        await ctx.SaveChangesAsync();
+    }
+    catch (Exception e)
+    {
+        return Results.Problem(detail: e.Message);
+    }
 
     return Results.Ok(usuario);
-
-});
-
-// Criar Evento
-app.MapPost("/sistema/evento/criar", async ([FromBody] Evento evento, [FromServices] AppDbContex ctx) => {
-    
-    Usuario? proprietario = ctx.Usuarios.Find(evento.ProprietarioId);
-
-    if (proprietario == null)
-        return Results.NotFound("Usuário não encontrado.");
-    
-    if (proprietario.Perfil != PerfilEnum.Organizador)
-        return Results.BadRequest("Usuário não é um organizador.");
-
-    evento.Proprietario = proprietario;
-
-    ctx.Eventos.Add(evento);
-    await ctx.SaveChangesAsync();
-    
-    return Results.Created("", evento);
-
-}); 
-
-// Deletar Evento
-app.MapDelete("/sistema/evento/excluir/{id}", async (int id, [FromServices] AppDbContex ctx) => {
-
-    Evento? evento = ctx.Eventos.Find(id);
-
-    if (evento == null)
-        return Results.NotFound();
-
-    ctx.Eventos.Remove(evento);
-    await ctx.SaveChangesAsync();
-
-    return Results.Ok(evento);
-
 });
 
 // Listar Eventos
-app.MapGet("/sistema/evento/listar", ([FromServices] AppDbContex ctx) => {
+app.MapGet("/sistema/evento/listar", async ([FromServices] AppDbContex ctx) => {
 
-    List<Evento> eventos = ctx.Eventos.Include(e => e.Proprietario).ToList();
+    List<Evento> eventos = await ctx.Eventos.Include(e => e.Proprietario).ToListAsync();
 
-    if(ctx.Eventos.Any())
-        return Results.Ok(eventos);
+    if (eventos == null)
+    {
+        return Results.NotFound("Nenhum evento encontrado.");
+    }
 
-    return Results.NotFound("Nenhum evento encontrado.");
+    return Results.Ok(eventos);
+});
 
+// Criar Evento
+app.MapPost("/sistema/evento/criar", async ([FromBody] Evento evento, [FromServices] AppDbContex ctx) =>
+{
+    // VALIDAÇÃO DOS CAMPOS
+    if (string.IsNullOrWhiteSpace(evento.Nome))
+    {
+        return Results.BadRequest(new { mensagem = "O campo 'Nome' é obrigatório." });
+    }
+
+    if (string.IsNullOrWhiteSpace(evento.Descricao))
+    {
+        return Results.BadRequest(new { mensagem = "O campo 'Descricao' é obrigatório." });
+    }
+
+    if (evento.DataEvento == default(DateTime))
+    {
+        return Results.BadRequest(new { mensagem = "O campo 'DataEvento' está em branco ou inválido." });
+    }
+
+    var proprietario = await ctx.Usuarios.FindAsync(evento.ProprietarioId);
+    
+    if (proprietario == null)
+    {
+        return Results.BadRequest(new { mensagem = "Usuário não encontrado." });
+    }
+
+    if (proprietario.Perfil != PerfilEnum.Organizador)
+    {
+        return Results.BadRequest(new { mensagem = "Usuário não é um organizador." });
+    }
+
+    evento.Proprietario = proprietario;
+
+    try
+    {
+        ctx.Eventos.Add(evento);
+        await ctx.SaveChangesAsync();
+    }
+    catch (Exception e)
+    {
+        return Results.Problem(detail: e.Message);
+    }
+
+    var eventos = await ctx.Eventos.ToListAsync();
+
+    return Results.Ok(eventos);
+});
+
+
+// Deletar Evento
+app.MapDelete("/sistema/evento/excluir/{id}", async ([FromRoute] int id, [FromServices] AppDbContex ctx) => {
+
+    var evento = await ctx.Eventos.FindAsync(id);
+
+    if (evento == null)
+        return Results.NotFound("Evento não encontrado.");
+
+    try
+    {
+        ctx.Eventos.Remove(evento);
+        await ctx.SaveChangesAsync();
+    }
+    catch (Exception e)
+    {
+        return Results.Problem(detail: e.Message);
+    }
+
+    return Results.Ok(evento);
 });
 
 // Inscrever-se em um evento
@@ -158,7 +286,7 @@ app.MapGet("/sistema/evento/listar-inscritos/{id}", (int id, [FromServices] AppD
     if (evento == null)
         return Results.NotFound("Evento não encontrado.");
 
-    List<Inscricao> inscricoes = ctx.Inscricoes.Include(i => i.Usuario).Include(i => i.Evento.Proprietario).Where(i => i.EventoId == id).ToList();
+    List<Inscricao> inscricoes = ctx.Inscricoes.Include(i => i.Usuario).Include(i => i.Evento!.Proprietario).Where(i => i.EventoId == id).ToList();
 
     if (inscricoes.Any())
         return Results.Ok(inscricoes);
@@ -175,7 +303,7 @@ app.MapGet("/sistema/usuario/listar-inscricoes/{id}", (int id, [FromServices] Ap
     if (usuario == null)
         return Results.NotFound("Usuário não encontrado.");
 
-    List<Inscricao> inscricoes = ctx.Inscricoes.Include(i => i.Usuario).Include(i => i.Evento.Proprietario).Where(i => id == i.UsuarioId).ToList();
+    List<Inscricao> inscricoes = ctx.Inscricoes.Include(i => i.Usuario).Include(i => i.Evento!.Proprietario).Where(i => id == i.UsuarioId).ToList();
 
     if (inscricoes.Any())
         return Results.Ok(inscricoes);
