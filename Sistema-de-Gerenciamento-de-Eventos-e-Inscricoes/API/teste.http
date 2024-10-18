@@ -56,15 +56,15 @@ POST {{baseUrl}}/evento/inscrever
 Content-Type: application/json
 
 {
-    "EventoId": 1,
-    "UsuarioId": 1
+    "EventoId": 2,
+    "UsuarioId": 3
 }
 
 ### Cancelar Inscrição em Evento
-DELETE {{baseUrl}}/evento/cancelar-inscricao/
+DELETE {{baseUrl}}/evento/cancelar-inscricao/1
 
 ### Listar inscrições de um evento
 GET {{baseUrl}}/evento/listar-inscritos/
 
 ### Listar inscrições de um usuário
-GET {{baseUrl}}/usuario/listar-inscricoes/
+GET {{baseUrl}}/usuario/listar-inscricoes/3
