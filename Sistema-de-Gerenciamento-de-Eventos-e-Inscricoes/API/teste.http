@@ -5,23 +5,23 @@ POST {{baseUrl}}/sistema/register
 Content-Type: application/json
 
 {
-    "Nome": "John",
-    "Email": "john@gmail.com",
+    "Nome": "Edu",
+    "Email": "edu@gmail.com",
     "Senha": "123456",
-    "Perfil": "Organizador"
+    "Perfil": "Participante"
 }
 
 ### Deletar Usuário
 DELETE {{baseUrl}}/sistema/delete/
 
 ### Atualizar Usuário
-PUT {{baseUrl}}/sistema/atualizar_cadastro/1
+PUT {{baseUrl}}/sistema/atualizar_cadastro/2
 Content-Type: application/json
 
 {
-    "Nome": "John Chappell",
-    "Email": "john_atualizado@gmail.com",
-    "Senha": "123456Atualizado"
+    "Nome": "Edu",
+    "Email": "edu_atualizado@gmail.com",
+    "Senha": "123456eduAtualizado"
 }
 
 ### Criar Evento
