@@ -1,30 +1,29 @@
 @baseUrl = http://localhost:5136/sistema
 
-### Listar Usuários
+### Listar Usuários | OK
 GET {{baseUrl}}/usuario/listar
 
-###
-// Consultar pelo campo de email
-GET {{baseUrl}}/usuario/buscar/ 
+### Consultar pelo campo de email | OK
+GET {{baseUrl}}/usuario/buscar/
 
-### Registrar Usuário
+### Registrar Usuário | OK
 POST {{baseUrl}}/usuario/registrar
 Content-Type: application/json
 
 {
-    "Nome": "John",
-    "Email": "john@gmail.com",
+    "Nome": "Dayane",
+    "Email": "day@gmail.com",
     "Senha": "123456",
     // Campo de perfil será informado futuramente através de um seletor
     // no frontend, não precisando de validação
-    "Perfil": "Organizador"
+    "Perfil": "Participante"
 }
 
-### Deletar Usuário
+### Deletar Usuário | OK
 DELETE {{baseUrl}}/usuario/deletar/
 
-### Atualizar Usuário
-PUT {{baseUrl}}/usuario/atualizar/1
+### Atualizar Usuário | OK
+PUT {{baseUrl}}/usuario/atualizar/
 Content-Type: application/json
 
 {
@@ -33,38 +32,41 @@ Content-Type: application/json
     "Senha": "123456Atualizado"
 }
 
-### Criar Evento
+### Criar Evento | OK
 POST {{baseUrl}}/evento/criar
 Content-Type: application/json
 
 {
-    "Nome": "Evento",
+    "Nome": "Evento 2",
     "Descricao": "Descrição do evento",
     "DataEvento": "2024-12-12T00:00:00",
-    "ProprietarioId": 3,
+    "ProprietarioId": 1,
     "VagasMaximo": 1
 }
 
-### Remover Evento
+### Remover Evento | OK
 DELETE {{baseUrl}}/evento/excluir/
 
-### Listar Eventos
+### Listar Eventos | OK
 GET {{baseUrl}}/evento/listar
 
-### Inscrever-se em Evento
+### Inscrever-se em Evento | OK
 POST {{baseUrl}}/evento/inscrever
 Content-Type: application/json
 
 {
-    "EventoId": 2,
-    "UsuarioId": 3
+    "EventoId": 1,
+    "UsuarioId": 1
 }
 
-### Cancelar Inscrição em Evento
-DELETE {{baseUrl}}/evento/cancelar-inscricao/1
+### Cancelar Inscrição em Evento | OK
+DELETE {{baseUrl}}/evento/cancelar-inscricao//
 
-### Listar inscrições de um evento
+### Listar inscrições de um evento | OK
 GET {{baseUrl}}/evento/listar-inscritos/
 
-### Listar inscrições de um usuário
-GET {{baseUrl}}/usuario/listar-inscricoes/3
+### Listar inscrições de um usuário | OK
+GET {{baseUrl}}/usuario/listar-inscricoes/
+
+### Buscar inscrição por ID do usuário e do evento | OK
+GET {{baseUrl}}/usuario/buscar-inscricao//
