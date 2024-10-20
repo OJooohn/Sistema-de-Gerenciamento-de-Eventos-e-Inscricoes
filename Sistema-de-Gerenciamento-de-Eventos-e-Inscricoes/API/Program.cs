@@ -89,7 +89,7 @@ app.MapDelete("/sistema/usuario/deletar/{id}", async ([FromRoute] int id, [FromS
 
 // Atualizar Usuário
 app.MapPut("/sistema/usuario/atualizar/{id}", async ([FromRoute] int id, [FromBody] Usuario cadastroAtualizado, [FromServices] AppDbContex ctx) => {
-    var usuario = await ctx.Usuarios.FindAsync(id);
+    Usuario? usuario = await ctx.Usuarios.FindAsync(id);
     if (usuario == null)
         return Results.NotFound(new { mensagem = "Usuário não encontrado." });
 
