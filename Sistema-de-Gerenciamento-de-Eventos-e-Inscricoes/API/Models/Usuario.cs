@@ -9,11 +9,17 @@ namespace API.Models
         public string? Nome { get; set; }
         public string? Email { get; set; }
         private string? senha;
+        public PerfilEnum Perfil { get; set; }
+
         public string? Senha
         {
-            get { return senha != null ? "******" : null; }
-            set { senha = value; }
+            get { return senha; }
+            set { senha = value != null ? new string('*', value.Length) : null; }
         }
-        public PerfilEnum Perfil { get; set; }
+
+        public string? GetSenhaMascarada()
+        {
+            return senha;
+        }
     }
 }

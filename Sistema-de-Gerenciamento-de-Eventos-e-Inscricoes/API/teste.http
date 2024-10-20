@@ -1,44 +1,72 @@
-@baseUrl = http://localhost:5136
+@baseUrl = http://localhost:5136/sistema
 
-### Registrar Usuário
-POST {{baseUrl}}/sistema/register
+### Listar Usuários | OK
+GET {{baseUrl}}/usuario/listar
+
+### Consultar pelo campo de email | OK
+GET {{baseUrl}}/usuario/buscar/
+
+### Registrar Usuário | OK
+POST {{baseUrl}}/usuario/registrar
 Content-Type: application/json
 
 {
-    "Nome": "Edu",
-    "Email": "edu@gmail.com",
+    "Nome": "Dayane",
+    "Email": "day@gmail.com",
     "Senha": "123456",
+    // Campo de perfil será informado futuramente através de um seletor
+    // no frontend, não precisando de validação
     "Perfil": "Participante"
 }
 
-### Deletar Usuário
-DELETE {{baseUrl}}/sistema/delete/
+### Deletar Usuário | OK
+DELETE {{baseUrl}}/usuario/deletar/
 
 ### Atualizar Usuário
-PUT {{baseUrl}}/sistema/atualizar_cadastro/2
+PUT {{baseUrl}}/sistema/atualizar/
 Content-Type: application/json
 
 {
-    "Nome": "Edu",
-    "Email": "edu_atualizado@gmail.com",
-    "Senha": "123456eduAtualizado"
+    "Nome": "John Chappell",
+    "Email": "john_chappell@gmail.com",
+    "Senha": "123456Atualizado"
 }
 
-### Criar Evento
-POST {{baseUrl}}/sistema/criar_evento
+### Criar Evento | OK
+POST {{baseUrl}}/evento/criar
 Content-Type: application/json
 
 {
-    "Nome": "Evento Teste ",
-    "Descricao": "Descrição Teste",
-    "DataEvento": "2021-12-12T00:00:00",
-    "Proprietario": {
-        "Id": 1
-    }
+    "Nome": "Evento 2",
+    "Descricao": "Descrição do evento",
+    "DataEvento": "2024-12-12T00:00:00",
+    "ProprietarioId": 1,
+    "VagasMaximo": 1
 }
 
-### Remover Evento
-DELETE {{baseUrl}}/sistema/deletar_evento/
+### Remover Evento | OK
+DELETE {{baseUrl}}/evento/excluir/
 
-### Listar Eventos
-GET {{baseUrl}}/sistema/listar_eventos
+### Listar Eventos | OK
+GET {{baseUrl}}/evento/listar
+
+### Inscrever-se em Evento | OK
+POST {{baseUrl}}/evento/inscrever
+Content-Type: application/json
+
+{
+    "EventoId": 1,
+    "UsuarioId": 1
+}
+
+### Cancelar Inscrição em Evento | OK
+DELETE {{baseUrl}}/evento/cancelar-inscricao//
+
+### Listar inscrições de um evento | OK
+GET {{baseUrl}}/evento/listar-inscritos/
+
+### Listar inscrições de um usuário | OK
+GET {{baseUrl}}/usuario/listar-inscricoes/
+
+### Buscar inscrição por ID do usuário e do evento | OK
+GET {{baseUrl}}/usuario/buscar-inscricao//
