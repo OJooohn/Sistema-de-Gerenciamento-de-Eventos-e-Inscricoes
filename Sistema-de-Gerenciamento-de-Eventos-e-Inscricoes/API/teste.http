@@ -11,19 +11,19 @@ POST {{baseUrl}}/usuario/registrar
 Content-Type: application/json
 
 {
-    "Nome": "Dayane",
-    "Email": "day@gmail.com",
+    "Nome": "John",
+    "Email": "john@gmail.com",
     "Senha": "123456",
     // Campo de perfil será informado futuramente através de um seletor
     // no frontend, não precisando de validação
-    "Perfil": "Participante"
+    "Perfil": "Organizador"
 }
 
 ### Deletar Usuário | OK
-DELETE {{baseUrl}}/usuario/deletar/
+DELETE {{baseUrl}}/usuario/deletar/5
 
 ### Atualizar Usuário
-PUT {{baseUrl}}/sistema/atualizar/
+PUT {{baseUrl}}/usuario/atualizar/
 Content-Type: application/json
 
 {
