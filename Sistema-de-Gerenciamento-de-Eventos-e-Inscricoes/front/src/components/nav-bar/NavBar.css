@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&display=swap');
+
+/* Estilo para o componente NavBar */
+.NavBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #3eb9a4;
+    font-family: "Kanit", sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.NavBar .left-side {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.NavBar .left-side img {
+    width: 45px;
+    height: 45px;
+}
+
+.NavBar .left-side h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    font-style: italic;
+    margin: 0;
+    margin-left: -5px;
+    background: linear-gradient(to bottom, #3eb9a4, #254e54);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.NavBar .left-side input[type="text"] {
+    padding: 10px 15px;
+    margin-left: 5px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    outline: none;
+    border-radius: 20px;
+    width: 300px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.NavBar .left-side input[type="text"]:focus {
+    border-color: #3eb9a4;
+    box-shadow: 0 2px 8px rgba(62, 185, 164, 0.3);
+}
+
+.NavBar .right-side ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.btn-simples{
+    font-family: "Kanit", sans-serif;
+    color: #3eb9a4;
+    background-color: transparent;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-irado {
+    font-family: "Kanit", sans-serif;
+    color: #3eb9a4;
+    background-color: transparent;
+    border: 1px solid #3eb9a4;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-irado {
+    font-weight: 600;
+}
+
+.btn-irado:hover {
+    background-color: #3eb9a4;
+    color: #ffffff;
+}
