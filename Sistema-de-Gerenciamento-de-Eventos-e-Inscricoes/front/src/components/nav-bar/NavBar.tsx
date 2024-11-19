@@ -1,24 +1,28 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./NavBar.css";
+import logo from "./logo.png";
 
 function NavBar() {
-    return (
+
+  return (
+    <>
       <div className="NavBar">
         <div className="left-side">
-            <img src="./logo.png"/>
-            <h1>Univent</h1>
-            <input type="text" />
+          <Link to="/" className="abisurdu"><img src={logo} alt="Logo" /></Link>
+          <Link to="/" className="abisurdu"><h1>Univent</h1></Link>
+          <input type="text" placeholder="Pesquisar..." />
         </div>
         <div className="right-side">
-            <ul>
-                <li><button className="btn-simples">CRIE SEU EVENTO</button></li>
-                <li><button className="btn-simples">ACESSE SUA CONTA</button></li>
-                <li><button className="btn-irado">CADASTRE-SE</button></li>
-            </ul>
+          <ul>
+            <li><Link to="#"><button className="btn-simples">CRIE SEU EVENTO</button></Link></li>
+            <li><Link to="#"><button className="btn-simples">ACESSE SUA CONTA</button></Link></li>
+            <li><Link to="/signup"><button className="btn-irado">CADASTRE-SE</button></Link></li>
+          </ul>
         </div>
       </div>
-    );
-  }
-  
-  export default NavBar;
-  
+    </>
+  );
+}
+
+export default NavBar;

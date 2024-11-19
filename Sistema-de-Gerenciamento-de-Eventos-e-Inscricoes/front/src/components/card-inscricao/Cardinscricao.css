@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+.card{
+    width: 70%;
+    height: 100%;
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    margin-left: 210px;
+}
+
+.left-side-card{
+    background: linear-gradient(to bottom, #3eb9a4, #254e54);
+    height: 200px;
+    width: 75%;
+    border-radius: 10px 0 0 10px;
+}
+
+.left-side-card h1{
+    color: white;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 4rem;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.left-side-card p{
+    color: white;
+    font-family: 'Kanit', sans-serif;
+    font-size: 1.5rem;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.right-side-card{
+    width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-side-card button{
+    width: 150px;
+    height: 50px;
+    background-color: #3eb9a4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.7rem;
+    cursor: pointer;
+    margin-top: 70px;
+    transition: 0.5s;
+}
+
+.right-side-card button:hover{
+    background-color: #254e54;
+}

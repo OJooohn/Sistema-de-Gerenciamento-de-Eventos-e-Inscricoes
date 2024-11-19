@@ -10,6 +10,15 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContex>();
+
+builder.Services.AddCors(options =>
+    options.AddPolicy("Acesso Total",
+        configs => configs
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod())
+);
+
 var app = builder.Build();
 
 // Middleware global de tratamento de exceções
@@ -336,6 +345,8 @@ app.MapGet("/sistema/usuario/buscar-inscricao/{id_usuario}/{id_evento}", async (
 
     return Results.Ok(inscricao);
 });
+
+app.UseCors("Acesso Total");
 
 app.Run();
 
