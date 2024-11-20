@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './signup.css';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
     const [nome, setNome] = useState<string>('');
@@ -7,6 +8,8 @@ function Signup() {
     const [senha, setSenha] = useState<string>('');
     const [confirmarSenha, setConfirmarSenha] = useState<string>('');
     const [perfil, setPerfil] = useState<string>('');
+
+    const navigate = useNavigate();
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -43,6 +46,8 @@ function Signup() {
                 setConfirmarSenha('');
                 setPerfil('');
                 alert('Usuário registrado com sucesso!');
+                
+                navigate('/login');
             })
             .catch((error) => {
                 console.error('Erro:', error);

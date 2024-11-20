@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ### Deletar Usuário | OK
-DELETE {{baseUrl}}/usuario/deletar/
+DELETE {{baseUrl}}/usuario/deletar/2
 
 ### Atualizar Usuário | OK
 PUT {{baseUrl}}/usuario/atualizar/

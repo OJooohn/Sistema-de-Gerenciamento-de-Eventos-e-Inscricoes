@@ -10,6 +10,8 @@ import {
 import Home from './components/home/Home';
 import Signup from './components/signup/signup';
 import App from './App';
+import Perfil from './components/perfil/Perfil';
+import Login from './components/login/login';
 
 const router = createBrowserRouter([
   {
@@ -23,11 +25,20 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <Signup />
+      },
+      {
+        path: '/perfil',
+        element: <Perfil />
+      },
+      {
+        path: '/login',
+        element: <Login />
       }
     ]
   },
 ]);
 
+localStorage.setItem('token', '');
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
