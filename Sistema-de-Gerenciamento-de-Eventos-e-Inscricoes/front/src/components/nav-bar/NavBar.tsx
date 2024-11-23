@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./NavBar.css";
 import logo from "./logo.png";
 
@@ -8,9 +8,13 @@ function NavBar() {
 
   const isLoggedIn = localStorage.getItem("usuario") !== null;
 
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem("usuario");
     setReloadKey((prevKey) => prevKey + 1); // Atualiza a chave para forçar re-renderização
+    navigate("/");
+    window.location.reload(); // Força uma recarga completa da página
   };
 
   const handleReload = () => {
@@ -30,20 +34,15 @@ function NavBar() {
       </div>
       <div className="right-side">
         <ul>
-          <li>
-            <Link to="#">
-              <button className="btn-simples" onClick={handleReload}>CRIE SEU EVENTO</button>
-            </Link>
-          </li>
           {!isLoggedIn ? (
             <>
               <li>
-                <Link to="/login">
+                <Link to="/usuario/login">
                   <button className="btn-simples" onClick={handleReload}>ACESSE SUA CONTA</button>
                 </Link>
               </li>
               <li>
-                <Link to="/signup">
+                <Link to="/usuario/signup">
                   <button className="btn-irado" onClick={handleReload}>CADASTRE-SE</button>
                 </Link>
               </li>
@@ -51,14 +50,12 @@ function NavBar() {
           ) : (
             <>
               <li>
-                <Link to="/perfil">
-                  <button className="btn-simples" onClick={handleReload}>PERFIL</button>
-                </Link>
+                <button className="btn-simples" onClick={handleLogout}>SAIR</button>
               </li>
               <li>
-                <button className="btn-simples" onClick={handleLogout}>
-                  SAIR
-                </button>
+                <Link to="/usuario/perfil">
+                  <button className="btn-simples" onClick={handleReload}>PERFIL</button>
+                </Link>
               </li>
             </>
           )}

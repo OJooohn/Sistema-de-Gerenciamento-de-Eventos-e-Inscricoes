@@ -1,12 +1,13 @@
 @baseUrl = http://localhost:5136/sistema
 
-### Listar Usuários | OK
+### USUARIO ###
+#### Listar Usuários
 GET {{baseUrl}}/usuario/listar
 
-### Consultar pelo campo de email | OK
-GET {{baseUrl}}/usuario/buscar/
+#### Consultar Usuario por Email
+GET {{baseUrl}}/usuario/buscar/{Email Usuario}
 
-### Registrar Usuário | OK
+#### Registrar Usuário
 POST {{baseUrl}}/usuario/registrar
 Content-Type: application/json
 
@@ -19,20 +20,29 @@ Content-Type: application/json
     "Perfil": "Participante"
 }
 
-### Deletar Usuário | OK
-DELETE {{baseUrl}}/usuario/deletar/2
+#### Deletar Usuário
+DELETE {{baseUrl}}/usuario/deletar/
 
-### Atualizar Usuário | OK
-PUT {{baseUrl}}/usuario/atualizar/
+#### Atualizar Usuário
+PUT {{baseUrl}}/usuario/atualizar/{ID Evento}
 Content-Type: application/json
 
 {
     "Nome": "John Chappell",
-    "Email": "john_atualizado@gmail.com",
-    "Senha": "123456Atualizado"
+    "Email": "john_atualizado@gmail.com"
 }
 
-### Criar Evento | OK
+### EVENTO ###
+#### Listar Eventos
+GET {{baseUrl}}/evento/listar
+
+#### Listar Evento por ID
+GET {{baseUrl}}/evento/buscar/{ID Evento}
+
+#### Listar Eventos de um Proprietario por ID
+GET {{baseUrl}}/evento/meus-eventos/{ID Proprietario}
+
+#### Criar Evento
 POST {{baseUrl}}/evento/criar
 Content-Type: application/json
 
@@ -44,13 +54,31 @@ Content-Type: application/json
     "VagasMaximo": 1
 }
 
-### Remover Evento | OK
-DELETE {{baseUrl}}/evento/excluir/
+#### Remover Evento
+DELETE {{baseUrl}}/evento/excluir/{ID Evento}
 
-### Listar Eventos | OK
-GET {{baseUrl}}/evento/listar
+#### Editar Evento
+PUT {{baseUrl}}/evento/alterar/{ID Evento}
+Content-Type: application/json
 
-### Inscrever-se em Evento | OK
+{
+    "Nome": "Evento 2",
+    "Descricao": "Descrição do evento",
+    "DataEvento": "2024-12-12T00:00:00",
+    "VagasMaximo": 1
+}
+
+### INSCRIÇÃO
+#### Listar inscrições de um evento
+GET {{baseUrl}}/evento/listar-inscritos/{ID Evento}
+
+#### Listar inscrições de um usuário
+GET {{baseUrl}}/usuario/listar-inscricoes/{ID Usuario}
+
+#### Buscar inscrição por Usuario e Evento
+GET {{baseUrl}}/usuario/buscar-inscricao/{ID Usuario}/{ID Evento}
+
+#### Inscrever-se em Evento
 POST {{baseUrl}}/evento/inscrever
 Content-Type: application/json
 
@@ -59,14 +87,11 @@ Content-Type: application/json
     "UsuarioId": 1
 }
 
-### Cancelar Inscrição em Evento | OK
-DELETE {{baseUrl}}/evento/cancelar-inscricao//
+#### Cancelar Inscrição em Evento
+DELETE {{baseUrl}}/evento/cancelar-inscricao/
+Content-Type: application/json
 
-### Listar inscrições de um evento | OK
-GET {{baseUrl}}/evento/listar-inscritos/
-
-### Listar inscrições de um usuário | OK
-GET {{baseUrl}}/usuario/listar-inscricoes/
-
-### Buscar inscrição por ID do usuário e do evento | OK
-GET {{baseUrl}}/usuario/buscar-inscricao//
+{
+    "EventoId": 1,
+    "UsuarioId": 1
+}

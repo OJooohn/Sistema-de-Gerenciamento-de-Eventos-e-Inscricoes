@@ -1,4 +1,4 @@
-import Cardinscricao from "../card-inscricao/Cardinscricao";
+import Cardinscricao from "./card-inscricao/Cardinscricao";
 
 function Home() {
     return (

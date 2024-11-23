@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.perfil {
+    width: 100%;
+    margin: auto;
+    margin-top: 50px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.card-perfil {
+    width: 50%;
+    margin: auto;
+    padding: 20px;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    background: linear-gradient(to bottom, #3eb9a4, #254e54);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card-perfil-title {
+    font-family: 'Bebas Neue', cursive;
+    color: white;
+    font-size: 1.7rem;
+    width: fit-content;
+    margin: auto;
+    margin-top: -40px;
+    margin-bottom: -40px;
+}
+
+.table-card {
+    width: 70%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-perfil table {
+    width: 100%;
+    margin: auto;
+    color: white;
+    border-collapse: collapse;
+}
+
+.card-perfil table th,
+.card-perfil table td {
+  padding: 8px;
+}
+
+.card-perfil table tr:last-child td:last-child {
+  border-bottom-right-radius: 20px;
+}
+
+.card-perfil table tr:last-child td:first-child {
+  border-bottom-left-radius: 20px;
+}
+
+.card-perfil table thead {
+    border-bottom: white 1px solid;
+}
+
+.card-perfil table tbody tr:not(:last-child) {
+    border-bottom: white 1px solid;
+}
+
+.card-perfil table tbody tr td:not(:last-child) {
+    border-right: white 1px solid;
+}
+
+.card-perfil table th {
+  background-color: #3eb9a4;
+  color: white;
+  text-align: center;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+
+.card-perfil table tbody {
+    background: linear-gradient(to bottom, #3eb9a4, #254e54);
+}
+
+.perfil-controls {
+    display: flex;
+    justify-content: flex-start; /* Altere para flex-start, center ou space-around */
+    gap: 10px; /* Espaçamento fixo entre os botões */
+    width: 100%;
+    margin: auto;
+}
+
+.perfil-controls a {
+    flex: 1; /* Faz com que os Links ocupem o mesmo espaço que os botões */
+    display: flex; /* Permite que o botão interno se expanda */
+}
+
+.perfil-controls a button {
+    flex: 1; /* Faz com que o botão dentro do Link ocupe todo o espaço disponível */
+    border-radius: 5px;
+}
+
+.perfil-controls button {
+    flex: 1; /* Faz todos os botões ocuparem o mesmo espaço */
+    margin-top: 25px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background: #3eb9a4;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.5rem;
+    color: white;
+    padding: 10px; /* Garante tamanho uniforme */
+    transition: 0.3s;
+    text-align: center;
+}
+
+.perfil-controls button:hover {
+    background: #d7d7d7;
+    color: black;
+}
+
+.perfil-controls a {
+    text-decoration: none; /* Remove o sublinhado */
+}
+
+.perfil-controls a button {
+    text-decoration: none; /* Garante que o botão interno também não tenha sublinhado */
+}

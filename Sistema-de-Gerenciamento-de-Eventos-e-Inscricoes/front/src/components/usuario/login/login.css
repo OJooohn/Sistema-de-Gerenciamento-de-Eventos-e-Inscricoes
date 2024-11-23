@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.login {
+    width: 100%;
+    margin: auto;
+    margin-top: 50px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.card-login {
+    width: 33%;
+    margin: auto;
+    padding: 20px;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    background: linear-gradient(to bottom, #3eb9a4, #254e54);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-login-title {
+    display: flex;
+    flex-direction: column;
+
+    width: fit-content;
+    margin: auto; 
+
+    font-family: 'Bebas Neue', cursive;
+    color: white;
+}
+
+.card-login-title h1{
+    margin: auto;
+    font-size: 4rem;
+}
+
+.form-login-card form {
+    width: 90%;
+    margin: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.form-login-card form label {
+    display: flex;
+    flex-direction: column;
+    font-family: "Kanit";
+    color: white;
+}
+
+.form-login-card form input{
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1.2rem;
+}
+
+.form-login-card form button{
+    margin-top: 25px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1.7rem;
+    background: #3eb9a4;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: "Bebas Neue";
+}
+
+.form-login-card form button:hover{
+    background: #d7d7d7;
+    color: black;
+}
+
+.login-button {
+    margin: auto;
+}

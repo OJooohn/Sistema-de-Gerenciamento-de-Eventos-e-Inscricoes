@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.MeusEventos {
+    width: 100%;
+    margin: auto;
+    margin-top: 50px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.meusEventos-card {
+    width: 70%;
+    margin: auto;
+    padding: 20px;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    background: linear-gradient(to bottom, #3eb9a4, #254e54);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.meusEventos-card-title {
+    display: flex;
+    flex-direction: column;
+
+    width: fit-content;
+    margin: auto; 
+
+    font-family: 'Bebas Neue', cursive;
+    color: white;
+}
+
+.meusEventos-card-title h1{
+    margin: auto;
+    font-size: 4rem;
+    margin-bottom: 30px;
+}
+
+.card-inscrever-evento-title h1{
+    margin: auto;
+    font-size: 4rem;
+    margin-bottom: 30px;
+}
+
+.eventos-card {
+    width: 95%;
+    margin: auto;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    perspective: 1000px;
+}
+
+.evento-card-wrapper {
+    flex: 1 1 calc(33.33% - 20px);
+    perspective: inherit;
+}
+
+.evento-card {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 8px 5px rgba(0, 0, 0, 0.5);
+    transition: transform 0.5s, box-shadow 0.5s;
+    transform-style: preserve-3d;
+}
+
+.evento-card:hover {
+    transform: rotateX(15deg);
+    box-shadow: 0 40px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.5s, box-shadow 0.5s;
+}
+
+.evento-card h2 {
+    font-family: 'Bebas Neue', cursive;
+    color: white;
+    font-size: 1.7rem;
+    letter-spacing: 2px;
+    margin: auto;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.descricao-evento {
+    display: flex;
+    flex-direction: column;
+}
+
+.descricao-evento h3,
+.data-evento h3, 
+.vagas-evento h3, 
+.organizador-evento h3 {
+    margin-left: 5px;
+    margin-bottom: 14px;
+    color: white;
+}
+
+.descricao-evento p,
+.data-evento p, 
+.vagas-evento p, 
+.organizador-evento p{
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: -12px;
+}
+
+.evento-card > *:not(:first-child) h3 {
+    margin-top: -7px;
+}
+
+.double-btn {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.double-btn button{
+    width: 50%;
+    padding: 10px;
+    border: none;
+    font-size: 1.5rem;
+    background: #3eb9a4;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-family: "Bebas Neue";
+}
+
+.double-btn button.btn-editar-evento {
+    background: #005acf;
+    color: white;
+}
+
+.double-btn button.btn-cancelar-evento {
+    background: #740000;
+    color: white;
+}
+
+.double-btn button.btn-cancelar-evento:hover {
+    background: #460000;
+    color: white;
+}
+
+.double-btn button.btn-editar-evento:hover {
+    background: #00459e;
+    color: white;
+}
+
+.double-btn a {
+    width: 50%;
+}
+
+.double-btn a button {
+    width: 100%;
+}
+
+.btn-cancelar-evento {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.btn-editar-evento {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
