@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&display=swap');
+
+.card {
+    width: 100%;
+    height: calc(100vh - 75px);
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    margin: auto;
+    padding: 20px;
+
+    color: #FFFFFF;
+
+    font-family: 'Kanit', sans-serif;
+}
+
+.info-card {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: #273847;
+
+    margin: auto;
+    padding: 1.5rem;
+    border-radius: 2rem;
+}
+
+.info-card h1 {
+    font-size: 2.2rem;
+    text-align: center;
+    text-transform: uppercase;
+
+    font-weight: 600;
+
+    margin-bottom: 0.5rem;
+}
+
+.info-card .user-info-card {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+
+    margin: auto;
+    padding: 1rem;
+}
+
+.user-info-card .user-info {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    justify-content: center;
+    align-items: center;
+
+    flex: 1;
+}
+.user-info-card .user-info h3 {
+    text-align: center;
+
+    font-weight: 300;
+}
+
+.user-info-card .user-info p {
+    min-width: 180px;
+
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+    padding: 7px 15px;
+    border-radius: 2rem;
+
+    border: #3eb9a4 1px solid;
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+.edit-btn {
+    font-family: 'Kanit', sans-serif;
+    font-size: 1.2rem;
+
+    width: 25%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: auto;
+    margin-top: 20px;
+    padding: 5px 10px;
+
+    border-radius: 2rem;
+    border: none;
+
+    border: #3eb9a4 1px solid;
+    background-color: transparent;
+    color: #3eb9a4;
+
+    cursor: pointer;
+
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.edit-btn:hover {
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+    background-color: #3eb9a4;
+    color: #FFFFFF;
+}
