@@ -10,12 +10,27 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContex>();
+
+builder.Services.AddCors(options =>
+    options.AddPolicy("Acesso Total",
+        configs => configs
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod())
+);
+
 var app = builder.Build();
 
 // Middleware global de tratamento de exceções
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
+app.UseCors("Acesso Total");
+
 app.MapGet("/", () => "Sistema de Gerenciamento de Eventos e Inscrições");
+
+/* 
+    ENDPOINTS DE USUARIO
+*/
 
 // Listar Usuários
 app.MapGet("/sistema/usuario/listar", async ([FromServices] AppDbContex ctx) => {
@@ -25,12 +40,46 @@ app.MapGet("/sistema/usuario/listar", async ([FromServices] AppDbContex ctx) => 
     return Results.NotFound("Nenhum usuário encontrado.");
 });
 
-// Buscar Usuário
+// Buscar Usuário por Email
 app.MapGet("/sistema/usuario/buscar/{email}", async ([FromRoute] string? email, [FromServices] AppDbContex ctx) => {
     if (string.IsNullOrWhiteSpace(email))
         return Results.BadRequest(new { mensagem = "O campo 'Email' é obrigatório." });
 
     Usuario? usuario = await ctx.Usuarios.FirstOrDefaultAsync(x => x.Email == email);
+
+    if (usuario == null)
+        return Results.NotFound(new { mensagem = "Usuário não encontrado." });
+
+    return Results.Ok(usuario);
+});
+
+// Buscar Usuário por ID (sem senha)
+app.MapGet("/sistema/usuario/basico/buscarID/{id}", async ([FromRoute] int? id, [FromServices] AppDbContex ctx) => {
+
+    if (id is null)
+        return Results.BadRequest(new { mensagem = "O campo 'ID' é obrigatório." });
+
+    Usuario? usuario = await ctx.Usuarios
+    .Select(u => new Usuario {
+        Id = u.Id,
+        Nome = u.Nome,
+        Email = u.Email,
+        Perfil = u.Perfil
+    }).FirstOrDefaultAsync(x => x.Id == id);
+
+    if (usuario == null)
+        return Results.NotFound(new { mensagem = "Usuário não encontrado." });
+
+    return Results.Ok(usuario);
+});
+
+// Buscar Usuário por ID (com senha)
+app.MapGet("/sistema/usuario/completo/buscarID/{id}", ([FromRoute] int? id, [FromServices] AppDbContex ctx) =>{
+
+    if (id is null)
+        return Results.BadRequest(new { mensagem = "O campo 'ID' é obrigatório." });
+
+    Usuario? usuario = ctx.Usuarios.Find(id);
 
     if (usuario == null)
         return Results.NotFound(new { mensagem = "Usuário não encontrado." });
@@ -89,7 +138,7 @@ app.MapDelete("/sistema/usuario/deletar/{id}", async ([FromRoute] int id, [FromS
 
 // Atualizar Usuário
 app.MapPut("/sistema/usuario/atualizar/{id}", async ([FromRoute] int id, [FromBody] Usuario cadastroAtualizado, [FromServices] AppDbContex ctx) => {
-    Usuario? usuario = await ctx.Usuarios.FindAsync(id);
+    var usuario = await ctx.Usuarios.FindAsync(id);
     if (usuario == null)
         return Results.NotFound(new { mensagem = "Usuário não encontrado." });
 
@@ -100,12 +149,8 @@ app.MapPut("/sistema/usuario/atualizar/{id}", async ([FromRoute] int id, [FromBo
     if (string.IsNullOrWhiteSpace(cadastroAtualizado.Email))
         return Results.BadRequest(new { mensagem = "O campo 'Email' é obrigatório." });
 
-    if (string.IsNullOrWhiteSpace(cadastroAtualizado.Senha))
-        return Results.BadRequest(new { mensagem = "O campo 'Senha' é obrigatório." });
-
     usuario.Nome = cadastroAtualizado.Nome;
     usuario.Email = cadastroAtualizado.Email;
-    usuario.Senha = cadastroAtualizado.Senha;
 
     try {
 
@@ -120,9 +165,48 @@ app.MapPut("/sistema/usuario/atualizar/{id}", async ([FromRoute] int id, [FromBo
     }
 });
 
+/* 
+    ENDPOINTS DE EVENTO
+*/
+
 // Listar Eventos
 app.MapGet("/sistema/evento/listar", async ([FromServices] AppDbContex ctx) => {
-    List<Evento> eventos = await ctx.Eventos.Include(e => e.Proprietario).ToListAsync();
+
+    List<Evento> eventos = await ctx.Eventos
+        .Include(e => e.Proprietario)
+        .Select(e => new Evento {
+            Id = e.Id,
+            Nome = e.Nome,
+            Descricao = e.Descricao,
+            DataEvento = e.DataEvento,
+            VagasMaximo = e.VagasMaximo,
+            VagasRestantes = e.VagasRestantes,
+            Proprietario = new Usuario { Nome = e.Proprietario!.Nome }
+        })
+        .ToListAsync();
+
+    if (eventos == null || eventos.Count == 0)
+        return Results.NotFound("Nenhum evento encontrado.");
+
+    return Results.Ok(eventos);
+});
+
+// Listar Eventos de um Proprietário (ID)
+app.MapGet("/sistema/evento/meus-eventos/{id}", async ([FromRoute] int id, [FromServices] AppDbContex ctx) => {
+    
+    List<Evento> eventos = await ctx.Eventos
+        .Include(e => e.Proprietario)
+        .Where(e => e.ProprietarioId == id)
+        .Select(e => new Evento {
+            Id = e.Id,
+            Nome = e.Nome,
+            Descricao = e.Descricao,
+            DataEvento = e.DataEvento,
+            VagasMaximo = e.VagasMaximo,
+            VagasRestantes = e.VagasRestantes,
+            Proprietario = new Usuario { Nome = e.Proprietario!.Nome }
+        })
+        .ToListAsync();
 
     if (eventos == null)
         return Results.NotFound("Nenhum evento encontrado.");
@@ -130,7 +214,7 @@ app.MapGet("/sistema/evento/listar", async ([FromServices] AppDbContex ctx) => {
     return Results.Ok(eventos);
 });
 
-// Buscar Evento por ID
+// Buscar Evento por ID de Evento
 app.MapGet("/sistema/evento/buscar/{id}", async ([FromRoute] int id, [FromServices] AppDbContex ctx) => {
     Evento? evento = await ctx.Eventos.Include(e => e.Proprietario).FirstOrDefaultAsync(e => e.Id == id);
 
@@ -139,6 +223,7 @@ app.MapGet("/sistema/evento/buscar/{id}", async ([FromRoute] int id, [FromServic
 
     return Results.Ok(evento);
 });
+
 
 // Criar Evento
 app.MapPost("/sistema/evento/criar", async ([FromBody] Evento evento, [FromServices] AppDbContex ctx) => {
@@ -161,9 +246,9 @@ app.MapPost("/sistema/evento/criar", async ([FromBody] Evento evento, [FromServi
         return Results.BadRequest(new { mensagem = "Usuário não é um organizador." });
 
     evento.Proprietario = proprietario;
+    evento.VagasRestantes = evento.VagasMaximo;
 
     try {
-
         ctx.Eventos.Add(evento);
         await ctx.SaveChangesAsync();
         return Results.Created("", evento);
@@ -196,7 +281,7 @@ app.MapDelete("/sistema/evento/excluir/{id}", async ([FromRoute] int id, [FromSe
     }
 });
 
-// Alterar cadastro do evento
+// Alterar informacoes do evento
 app.MapPut("/sistema/evento/alterar/{id}", async ([FromRoute] int id, [FromBody] Evento eventoAlterado, [FromServices] AppDbContex ctx) => {
     Evento? evento = await ctx.Eventos.FindAsync(id);
 
@@ -221,6 +306,9 @@ app.MapPut("/sistema/evento/alterar/{id}", async ([FromRoute] int id, [FromBody]
     evento.DataEvento = eventoAlterado.DataEvento;
     evento.VagasMaximo = eventoAlterado.VagasMaximo;
 
+    int totalInscricoes = await ctx.Inscricoes.CountAsync(i => i.EventoId == evento.Id);
+    evento.VagasRestantes = evento.VagasMaximo - totalInscricoes;
+
     try {
 
         ctx.Eventos.Update(evento);
@@ -232,6 +320,59 @@ app.MapPut("/sistema/evento/alterar/{id}", async ([FromRoute] int id, [FromBody]
         return Results.Problem(detail: e.Message);
 
     }
+});
+
+/* 
+    ENDPOINTS DE INSCRICAO
+*/
+
+// Listar inscrições de um Evento (ID Evento)
+app.MapGet("/sistema/evento/listar-inscritos/{id}", async ([FromRoute] int id, [FromServices] AppDbContex ctx) => {
+    Evento? evento = await ctx.Eventos.FindAsync(id);
+
+    if (evento == null)
+        return Results.NotFound(new { mensagem = "Evento não encontrado." });
+
+    List<Inscricao> inscricoes = await ctx.Inscricoes
+        .Include(i => i.Usuario)
+        .Where(i => i.EventoId == id)
+        .ToListAsync();
+
+    if (inscricoes.Count == 0)
+        return Results.NotFound("Nenhuma inscrição encontrada.");
+
+    return Results.Ok(inscricoes);
+});
+
+// Listar inscrições de um usuário (ID Usuario)
+app.MapGet("/sistema/usuario/listar-inscricoes/{id:int}", async ([FromRoute] int id, [FromServices] AppDbContex ctx) => {
+    Usuario? usuario = await ctx.Usuarios.FindAsync(id);
+
+    if (usuario == null)
+        return Results.NotFound(new { mensagem = "Usuário não encontrado." });
+
+    List<Inscricao> inscricoes = await ctx.Inscricoes
+        .Include(i => i.Evento)
+        .Where(i => i.UsuarioId == id)
+        .ToListAsync();
+
+    if (inscricoes.Count == 0)
+        return Results.NotFound("Nenhuma inscrição encontrada.");
+
+    return Results.Ok(inscricoes);
+});
+
+// Buscar inscrição por usuario e evento (ID Usuario e ID Evento)
+app.MapGet("/sistema/usuario/buscar-inscricao/{id_usuario}/{id_evento}", async ([FromRoute] int id_usuario, [FromRoute] int id_evento, [FromServices] AppDbContex ctx) => {
+    Inscricao? inscricao = await ctx.Inscricoes
+        .Include(i => i.Usuario)
+        .Include(i => i.Evento)
+        .FirstOrDefaultAsync(x => x.UsuarioId == id_usuario && x.EventoId == id_evento);
+
+    if (inscricao == null)
+        return Results.NotFound(new { mensagem = "Inscrição não encontrada." });
+
+    return Results.Ok(inscricao);
 });
 
 // Inscrever-se em um evento
@@ -256,6 +397,7 @@ app.MapPost("/sistema/evento/inscrever", async ([FromBody] Inscricao inscricao, 
         return Results.BadRequest(new { mensagem = "Usuário já inscrito no evento." });
 
     try {
+        evento.VagasRestantes--;
 
         ctx.Inscricoes.Add(inscricao);
         await ctx.SaveChangesAsync();
@@ -269,15 +411,22 @@ app.MapPost("/sistema/evento/inscrever", async ([FromBody] Inscricao inscricao, 
 });
 
 // Cancelar inscrição em um evento
-app.MapDelete("/sistema/evento/cancelar-inscricao/{id_usuario}/{id_evento}", async ([FromRoute] int id_usuario, [FromRoute] int id_evento, [FromServices] AppDbContex ctx) => {
-    Inscricao? inscricao = await ctx.Inscricoes.FirstOrDefaultAsync(x => x.UsuarioId == id_usuario && x.EventoId == id_evento);
+app.MapDelete("/sistema/evento/cancelar-inscricao", async ([FromBody] Inscricao inscricaoCancelar, [FromServices] AppDbContex ctx) => {
+
+    Inscricao? inscricao = await ctx.Inscricoes.FirstOrDefaultAsync(x => x.UsuarioId == inscricaoCancelar.UsuarioId && x.EventoId == inscricaoCancelar.EventoId);
 
     if (inscricao == null)
         return Results.NotFound(new { mensagem = "Inscrição não encontrada." });
 
-    try {
+    Evento? evento = await ctx.Eventos.FindAsync(inscricao.EventoId);
 
+    if (evento == null)
+        return Results.NotFound(new { mensagem = "Evento não encontrado." });
+
+    try {
         ctx.Inscricoes.Remove(inscricao);
+
+        evento.VagasRestantes++;
         await ctx.SaveChangesAsync();
         return Results.Ok(inscricao);
         
@@ -286,55 +435,6 @@ app.MapDelete("/sistema/evento/cancelar-inscricao/{id_usuario}/{id_evento}", asy
         return Results.Problem(detail: e.Message);
 
     }
-});
-
-// Listar inscrições de um evento
-app.MapGet("/sistema/evento/listar-inscritos/{id}", async ([FromRoute] int id, [FromServices] AppDbContex ctx) => {
-    Evento? evento = await ctx.Eventos.FindAsync(id);
-
-    if (evento == null)
-        return Results.NotFound(new { mensagem = "Evento não encontrado." });
-
-    List<Inscricao> inscricoes = await ctx.Inscricoes
-        .Include(i => i.Usuario)
-        .Where(i => i.EventoId == id)
-        .ToListAsync();
-
-    if (inscricoes.Count == 0)
-        return Results.NotFound("Nenhuma inscrição encontrada.");
-
-    return Results.Ok(inscricoes);
-});
-
-// Listar inscrições de um usuário
-app.MapGet("/sistema/usuario/listar-inscricoes/{id}", async ([FromRoute] int id, [FromServices] AppDbContex ctx) => {
-    Usuario? usuario = await ctx.Usuarios.FindAsync(id);
-
-    if (usuario == null)
-        return Results.NotFound(new { mensagem = "Usuário não encontrado." });
-
-    List<Inscricao> inscricoes = await ctx.Inscricoes
-        .Include(i => i.Evento)
-        .Where(i => i.UsuarioId == id)
-        .ToListAsync();
-
-    if (inscricoes.Count == 0)
-        return Results.NotFound("Nenhuma inscrição encontrada.");
-
-    return Results.Ok(inscricoes);
-});
-
-// Buscar inscrição por ID do usuário e do evento
-app.MapGet("/sistema/usuario/buscar-inscricao/{id_usuario}/{id_evento}", async ([FromRoute] int id_usuario, [FromRoute] int id_evento, [FromServices] AppDbContex ctx) => {
-    Inscricao? inscricao = await ctx.Inscricoes
-        .Include(i => i.Usuario)
-        .Include(i => i.Evento)
-        .FirstOrDefaultAsync(x => x.UsuarioId == id_usuario && x.EventoId == id_evento);
-
-    if (inscricao == null)
-        return Results.NotFound(new { mensagem = "Inscrição não encontrada." });
-
-    return Results.Ok(inscricao);
 });
 
 app.Run();

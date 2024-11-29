@@ -8,18 +8,7 @@ namespace API.Models
         public int Id { get; set; }
         public string? Nome { get; set; }
         public string? Email { get; set; }
-        private string? senha;
         public PerfilEnum Perfil { get; set; }
-
-        public string? Senha
-        {
-            get { return senha; }
-            set { senha = value != null ? new string('*', value.Length) : null; }
-        }
-
-        public string? GetSenhaMascarada()
-        {
-            return senha;
-        }
+        public string? Senha { get; set; }
     }
 }
