@@ -10,20 +10,19 @@ function InformacaoUsuario () {
 
     const navigate = useNavigate();
 
+    const usuarioID = JSON.parse(localStorage.getItem('usuario')?.toString() || '{}').id;
     const [usuario, setUsuario] = useState<Usuario>();
 
     useEffect(() => {
         if (hasRun.current) return;
         hasRun.current = true;
 
-        const usuario = JSON.parse(localStorage.getItem('usuario')?.toString() || '{}');
-        if (usuario.id === null) {
+        if (!usuarioID) {
             alert('Usuário não logado');
             navigate('/sistema/usuario/login');
             return;
         } 
 
-        const usuarioID = JSON.parse(localStorage.getItem('usuario')?.toString() || '{}').id;
         axios.get(`http://localhost:5136/sistema/usuario/basico/buscarID/` + usuarioID)
             .then((response) => {
                 if(response.status == 200) 
@@ -33,6 +32,19 @@ function InformacaoUsuario () {
                 console.error(error);
             })
     }, [usuario]);
+
+    function handleDeletarConta() {
+        axios.delete(`http://localhost:5136/sistema/usuario/deletar/${usuarioID}`)
+            .then((response) => {
+                if(response.status == 200) {
+                    localStorage.removeItem('usuario');
+                    navigate('/sistema/usuario/login');
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+    }
 
     return (
         <div className="card">
@@ -58,7 +70,19 @@ function InformacaoUsuario () {
                     )}
                 </div>
                 <hr></hr>
-                <button className="edit-btn" onClick={() => navigate('/sistema/usuario/editar')}>Editar Perfil</button>
+                <div className="perfil-buttons">
+                    <button className="delete-btn"
+                    onClick={
+                        () => {
+                            if(window.confirm('Deseja realmente deletar sua conta?')) {
+                                handleDeletarConta();
+                            }
+                        }
+                    }>
+                    Deletar
+                    </button>
+                    <button className="edit-btn" onClick={() => navigate('/sistema/usuario/editar')}>Editar Perfil</button> 
+                </div>
             </div>
         </div>
     );

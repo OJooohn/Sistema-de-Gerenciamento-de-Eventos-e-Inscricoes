@@ -80,12 +80,23 @@
     word-wrap: break-word; /* Quebra palavras longas */
 }
 
+.perfil-buttons {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    margin: auto;
+    padding: 1rem;
+}
+
 .edit-btn {
     text-decoration: none;
 
     font-family: 'Kanit', sans-serif;
     font-size: 1rem;
-    width: 30%;
+    min-width: 25%;;
 
     background-color: transparent;
     border: #5bc0de 1px solid;
@@ -94,7 +105,6 @@
 
     border-radius: 10px;
     padding: 5px 10px;
-    margin: auto;
     margin-top: 1rem;
     
     cursor: pointer;
@@ -116,4 +126,41 @@
 .edit-btn:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(91, 192, 222, 0.5);
+}
+
+.delete-btn {
+    font-family: 'Kanit', sans-serif;
+    font-size: 1rem;
+    min-width: 25%;
+    
+    background-color: transparent;
+    border: #dc3545 1px solid;
+    
+    color: #dc3545;
+    
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin-top: 1rem;
+    
+    cursor: pointer;
+    
+    cursor: pointer;
+    
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.2s ease;
+}
+
+.delete-btn:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+    
+    transform: scale(1.05);
+}
+
+.delete-btn:active {
+    transform: scale(0.95);
+}
+
+.delete-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.5);
 }
