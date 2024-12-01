@@ -12,28 +12,6 @@ function InformacaoUsuario () {
 
     const [usuario, setUsuario] = useState<Usuario>();
 
-    const [mensagem, setMensagem] = useState<string>();
-
-    async function handleUsuario() {
-        try {
-            const usuarioID = JSON.parse(localStorage.getItem('usuario')?.toString() || '{}').id;
-            const response = await axios.get(`http://localhost:5136/sistema/usuario/basico/buscarID/` + usuarioID);
-            
-            //console.log(response.data);
-
-            if(response.status == 200) {
-                setUsuario(response.data);
-                return;
-            }
-
-            setMensagem('Usuário não encontrado');
-            
-        } catch (error) {
-            console.error(error);
-            setMensagem('Erro ao buscar usuário');
-        }
-    }
-
     useEffect(() => {
         if (hasRun.current) return;
         hasRun.current = true;
@@ -44,10 +22,17 @@ function InformacaoUsuario () {
             navigate('/sistema/usuario/login');
             return;
         } 
-        
-        handleUsuario();
-        
-    }, []);
+
+        const usuarioID = JSON.parse(localStorage.getItem('usuario')?.toString() || '{}').id;
+        axios.get(`http://localhost:5136/sistema/usuario/basico/buscarID/` + usuarioID)
+            .then((response) => {
+                if(response.status == 200) 
+                    setUsuario(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+    }, [usuario]);
 
     return (
         <div className="card">

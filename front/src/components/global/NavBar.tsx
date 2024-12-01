@@ -35,6 +35,9 @@ function NavBar() {
                     ) : (
                     <>
                         <li>
+                            <Link className="btn btn-simples" to="/sistema/dashboard">Dashboard</Link>
+                        </li>
+                        <li>
                             <button className="btn btn-simples" onClick={handleLogout}>Logout</button>
                         </li>
                         <li>

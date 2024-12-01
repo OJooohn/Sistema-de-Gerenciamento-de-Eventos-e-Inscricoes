@@ -115,10 +115,10 @@
     border-radius: 2rem;
     padding: 5px 17px;
 
-    border: #3eb9a4 1px solid;
-
     background-color: transparent;
-    color: #3eb9a4;
+    border: #5bc0de 1px solid;
+
+    color: #5bc0de;
 
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
@@ -126,7 +126,7 @@
 .integrantes li:hover {
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 
-    background-color: #3eb9a4;
+    background-color: #5bc0de;
     color: white;
 }
 
@@ -144,10 +144,10 @@
     border-radius: 2rem;
     padding: 5px 17px;
 
-    border: #3eb9a4 1px solid;
-
     background-color: transparent;
-    color: #3eb9a4;
+    border: #5bc0de 1px solid;
+
+    color: #5bc0de;
 
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
@@ -155,7 +155,7 @@
 .home-cards li svg {
     margin-right: 8px;
 
-    color: #3eb9a4;
+    color: #5bc0de;
 
     transition: fill 0.3s ease-in-out;
 }
@@ -163,7 +163,7 @@
 .home-cards li:hover {
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 
-    background-color: #3eb9a4;
+    background-color: #5bc0de;
     color: white;
 }
 
@@ -190,10 +190,10 @@
     border-radius: 2rem;
     padding: 5px 17px;
 
-    border: #3eb9a4 1px solid;
-
     background-color: transparent;
-    color: #3eb9a4;
+    border: #5bc0de 1px solid;
+
+    color: #5bc0de;
 
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
@@ -201,7 +201,7 @@
 .beneficios li:hover {
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 
-    background-color: #3eb9a4;
+    background-color: #5bc0de;
     color: white;
 }
 
@@ -250,10 +250,10 @@
     padding: 3px 15px;
     border-radius: 2rem;
 
-    border: #3eb9a4 1px solid;
-
     background-color: transparent;
-    color: #3eb9a4;
+    border: #5bc0de 1px solid;
+
+    color: #5bc0de;
 
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
@@ -261,7 +261,7 @@
 .criar-evento-home .right-side-home button:hover {
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 
-    background-color: #3eb9a4;
+    background-color: #5bc0de;
     color: white;
 }
 

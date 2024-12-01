@@ -14,6 +14,8 @@
     padding: 20px;
 
     color: #FFFFFF;
+
+    overflow-y: auto;
 }
 
 .form-card {
@@ -101,8 +103,11 @@
     width: 100%;
     height: 2rem;
 
+    background-color: #1C262F;
+    color: white;
+
     margin-bottom: 1rem;
-    padding: 1rem;
+    padding: 1.2rem;
 
     border: none;
     border-radius: 1rem;
@@ -111,15 +116,22 @@
     font-size: 1rem;
 }
 
+.form-card form input::placeholder,
+.form-card form option,
+.form-card form select {
+    color: white;
+}
+
 .form-card form input:focus {
     outline: none;
 }
 
 .form-card form select {
-    padding: 0.3rem;
+    padding: 0.5rem;
     margin-bottom: 1rem;
 
-    border: 1px solid #000;
+    background-color: #1C262F;
+    border: none;
     border-radius: 1.5rem;
 
     font-family: 'Kanit', sans-serif;
@@ -127,7 +139,7 @@
 }
 
 .form-card form select option[disabled] {
-    color: #999;
+    color: gray;
 }
 
 .form-buttons {
@@ -140,45 +152,65 @@
 }
 
 .cancel-btn {
-    padding: 5px 10px;
-
-    background-color: #B22222;
-    color: #fff;
-
-    border: none;
-    border-radius: 1rem;
-
     font-family: 'Kanit', sans-serif;
-    font-size: 1.2rem;
-
+    font-size: 1rem;
+    min-width: 25%;
+    
+    background-color: transparent;
+    border: #dc3545 1px solid;
+    
+    color: #dc3545;
+    
+    border-radius: 10px;
+    padding: 5px 10px;
+    
     cursor: pointer;
-
-    transition: background-color 0.3s ease-in-out;
+    
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.2s ease;
 }
 
 .cancel-btn:hover {
-    background-color: #8B0000;
+    background-color: #dc3545;
+    color: #ffffff;
+    
+    transform: scale(1.05);
+}
+
+.cancel-btn:active {
+    transform: scale(0.95);
 }
 
 .submit-btn {
-    padding: 5px 10px;
-
-    background-color: #3eb9a4;
+    font-family: 'Kanit', sans-serif;
+    font-size: 1rem;
+    min-width: 25%;
+    
+    background-color: transparent;
+    border: #5bc0de 1px solid;
     color: #fff;
 
-    border: none;
-    border-radius: 1rem;
-
-    font-family: 'Kanit', sans-serif;
-    font-size: 1.2rem;
-
+    border-radius: 10px;
+    padding: 5px 10px;
+    
     cursor: pointer;
-
-    transition: background-color 0.3s ease-in-out;
+    
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.2s ease;
 }
 
 .submit-btn:hover {
-    background-color: #36A28E;
+    background-color: #5bc0de;
+    color: #ffffff;
+    
+    transform: scale(1.05);
+}
+
+.submit-btn:active {
+    transform: scale(0.95);
+}
+
+.submit-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(91, 192, 222, 0.5);
 }
 
 .sign-up {
@@ -190,7 +222,7 @@
 }
 
 .sign-up a {
-    color: #3eb9a4;
+    color: #5bc0de;
 
     text-decoration: none;
 }

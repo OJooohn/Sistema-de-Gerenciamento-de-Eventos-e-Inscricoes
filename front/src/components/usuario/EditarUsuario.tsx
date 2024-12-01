@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import './StyleForms.css';
+import '../global/StyleForms.css';
 import axios from 'axios';
 import { Usuario } from '../../models/Usuario';
 
@@ -20,59 +20,51 @@ function EditarUsuario() {
     const usuarioID = JSON.parse(localStorage.getItem('usuario')?.toString() || '{}').id;
 
     useEffect(() => {
-        const fetchUsuario = async () => {
-            try {
-                const response = await axios.get(`http://localhost:5136/sistema/usuario/completo/buscarID/${usuarioID}`);
-
-                if (response.status == 200) {
-                    setUsuario(response.data);
-                    setNome(response.data.nome);
-                    setEmail(response.data.email);
-                    return;
-                }
-
-                setMensagem('Usuário não encontrado');
-            } catch (error) {
-                console.error(error);
-                setMensagem('Erro ao buscar usuário');
-            }
-        };
-
-        fetchUsuario();
-    }, []);
+        axios.get(`http://localhost:5136/sistema/usuario/completo/buscarID/${usuarioID}`)
+        .then(response => {
+            setUsuario(response.data);
+            setNome(response.data.nome);
+            setEmail(response.data.email);
+        })
+        .catch((error) => {
+            console.error(error);
+            setMensagem('Erro ao buscar usuário');
+        })
+    }, [usuarioID]);
 
     async function handleEditarUsuario(e : React.FormEvent) {
         e.preventDefault();
 
-        if (senhaDigitada != usuario?.senha) {
+        if (senhaDigitada !== usuario?.senha) {
             console.log(senhaDigitada);
             console.log(usuario?.senha);
             setMensagem('Senha incorreta');
             return;
         }
 
-        try {
-            const usuario : Usuario = {
-                nome : nome,
-                email : email,
-                senha : senhaDigitada
-            }
-
-            console.log(usuario);
-
-            const response = await axios.put(`http://localhost:5136/sistema/usuario/atualizar/` + usuarioID, usuario, {method : 'PUT'});
-
-            if (response.status == 200) {
-                setMensagem('Usuário editado com sucesso');
-                navigate('/login');
-                return;
-            }
-
-            setMensagem('Erro ao editar usuário');
-        } catch (error) {
-            console.error(error);
-            setMensagem('Erro ao editar usuário');
+        const usuarioEditado : Usuario = {
+            nome : nome,
+            email : email,
+            senha : senhaDigitada
         }
+
+        axios.put(`http://localhost:5136/sistema/usuario/atualizar/` + usuarioID, usuarioEditado, {
+            method : 'PUT',
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    setMensagem('Usuário editado com sucesso');
+                    navigate('/sistema/usuario/login');
+                    return;
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                setMensagem(error.response?.data?.mensagem || 'Erro ao editar evento');
+            })
     };
 
     return (

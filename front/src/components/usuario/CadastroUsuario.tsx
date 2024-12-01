@@ -2,7 +2,7 @@ import { Usuario } from "../../models/Usuario";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import './StyleForms.css'
+import '../global/StyleForms.css';
 
 function CadastroUsuario() {
 
@@ -21,7 +21,7 @@ function CadastroUsuario() {
     async function handleCadastro(e : React.FormEvent) {
         e.preventDefault();
 
-        if (senha != confirmarSenha) {
+        if (senha !== confirmarSenha) {
             setMensagem('As senhas não conferem');
             return;
         }
@@ -32,24 +32,20 @@ function CadastroUsuario() {
             senha: senha,
             perfil: perfil
         }
-        
-        try {
-            const response = await axios.post('http://localhost:5136/sistema/usuario/registrar', usuario, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
 
-            // console.log(response.data);
-            setMensagem('Usuário cadastrado com sucesso');
-            
-            // alert('Usuário cadastrado com sucesso');
-
-            navigate('/sistema/usuario/login');
-        } catch (error) {
-            console.error(error);
-            setMensagem('Erro ao cadastrar usuário');
-        }
+        axios.post('http://localhost:5136/sistema/usuario/registrar', usuario, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                setMensagem('Usuário cadastrado com sucesso');
+                navigate('/sistema/usuario/login');
+            })
+            .catch((error) => {
+                console.error(error);
+                setMensagem(error.response?.data?.mensagem || 'Erro ao editar evento');
+            })
     }
 
     return (

@@ -1,6 +1,10 @@
 @baseUrl = http://localhost:5136/sistema
 
 ### USUARIO ###
+
+### Registrar Usuário
+GET http://localhost:5136/sistema/usuario/registrar
+
 #### Listar Usuários
 GET {{baseUrl}}/usuario/listar
 
@@ -73,7 +77,7 @@ Content-Type: application/json
 GET {{baseUrl}}/evento/listar-inscritos/{ID Evento}
 
 #### Listar inscrições de um usuário
-GET {{baseUrl}}/usuario/listar-inscricoes/{ID Usuario}
+GET {{baseUrl}}/usuario/listar-inscricoes/1
 
 #### Buscar inscrição por Usuario e Evento
 GET {{baseUrl}}/usuario/buscar-inscricao/{ID Usuario}/{ID Evento}

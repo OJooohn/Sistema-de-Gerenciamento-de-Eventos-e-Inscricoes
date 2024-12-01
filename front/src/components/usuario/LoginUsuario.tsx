@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import './StyleForms.css'
+import '../global/StyleForms.css';
 
 function LoginUsuario() {
 
@@ -15,22 +15,22 @@ function LoginUsuario() {
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
 
-        try {
-            const response = await axios.get(`http://localhost:5136/sistema/usuario/buscar/${email}`);
+        axios.get(`http://localhost:5136/sistema/usuario/buscar/${email}`)
+            .then(response => {
+                if (response.data.senha !== senha) {
+                    setMensagem('Senha incorreta');
+                    return;
+                }
 
-            if (response.data.senha !== senha) {
-                setMensagem('Senha incorreta');
-                return;
-            }
-
-            // Store as an object with an 'id' property
-            localStorage.setItem('usuario', JSON.stringify({ id: response.data.id }));
-            // console.log(localStorage.getItem('usuario'));
-            navigate('/sistema/dashboard');
-        } catch (error) {
-            console.error(error);
-            setMensagem('Usuário não encontrado');
-        }
+                // Store as an object with an 'id' property
+                localStorage.setItem('usuario', JSON.stringify({ id: response.data.id }));
+                // console.log(localStorage.getItem('usuario'));
+                navigate('/sistema/dashboard');
+            })
+            .catch(error => {
+                console.error(error);
+                setMensagem(error.response?.data?.mensagem || 'Erro ao editar evento');
+            });
     }
 
     return (

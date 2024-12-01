@@ -3,10 +3,11 @@ using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-// Use estes comandos para resetar o auto incrementos das tabelas
-// UPDATE sqlite_sequence SET seq = 0 WHERE name = 'Usuarios';
-// UPDATE sqlite_sequence SET seq = 0 WHERE name = 'Eventos';
-// UPDATE sqlite_sequence SET seq = 0 WHERE name = 'Inscricoes';
+// Resetar sequencia de autoincremento das tabelas
+// UPDATE sqlite_sequence SET seq = 0 WHERE name = 'Usuarios'; UPDATE sqlite_sequence SET seq = 0 WHERE name = 'Eventos'; UPDATE sqlite_sequence SET seq = 0 WHERE name = 'Inscricoes';
+
+// Excluir todos os registros das tabelas
+// DELETE FROM Usuarios; DELETE FROM Eventos; DELETE FROM Inscricoes;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContex>();
@@ -352,12 +353,24 @@ app.MapGet("/sistema/usuario/listar-inscricoes/{id:int}", async ([FromRoute] int
         return Results.NotFound(new { mensagem = "Usuário não encontrado." });
 
     List<Inscricao> inscricoes = await ctx.Inscricoes
-        .Include(i => i.Evento)
-        .Where(i => i.UsuarioId == id)
-        .ToListAsync();
+    .Where(i => i.UsuarioId == id)
+    .Select(i => new Inscricao {
+        Id = i.Id,
+        EventoId = i.EventoId,
+        Usuario = i.Usuario,
+        Evento = new Evento {
+            Id = i.Evento!.Id,
+            Nome = i.Evento!.Nome,
+            Descricao = i.Evento!.Descricao,
+            Proprietario = new Usuario { Nome = i.Evento!.Proprietario!.Nome }
+        }
+    })
+    .ToListAsync();
 
-    if (inscricoes.Count == 0)
-        return Results.NotFound("Nenhuma inscrição encontrada.");
+    if (inscricoes.Count == 0) {
+        inscricoes = [];
+        return Results.Ok(inscricoes);
+    }
 
     return Results.Ok(inscricoes);
 });

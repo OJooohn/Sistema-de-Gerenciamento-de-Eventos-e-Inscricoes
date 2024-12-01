@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&display=swap');
+
+.card {
+    width: 100%;
+    height: calc(100vh - 75px);
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    margin: auto;
+    padding: 20px;
+
+    color: #FFFFFF;
+
+    font-family: 'Kanit', sans-serif;
+}
+
+.dashboard-card {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: #273847;
+
+    margin: auto;
+    padding: 1.5rem;
+    border-radius: 2rem;
+
+    text-align: center;
+}
+
+.dashboard-card h1 {
+    font-size: 2.2rem;
+    text-transform: uppercase;
+
+    font-weight: 600;
+}
+
+.dashboard-card p {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-buttons {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 1rem;
+}
+
+.dashboard-buttons a {
+    text-decoration: none;
+    color: #3eb9a4;
+    font-size: 1.2rem;
+
+    border: #3eb9a4 1px solid;
+
+    padding: 3px 15px;
+    border-radius: 20px;
+
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.dashboard-buttons a:hover {
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+    background-color: #3eb9a4;
+    color: #FFFFFF;
+}
