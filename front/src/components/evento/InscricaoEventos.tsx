@@ -68,21 +68,11 @@ function InscricaoEventos() {
                                     }).format(new Date(inscricao.evento?.dataEvento!))}</p>
                                 </div>
 
-                                <div className='info-evento'>
-                                    <h3>Vagas restantes :</h3>
-                                    <p>{inscricao.evento?.vagasRestantes}</p>
-                                </div>
-
-                                <div className='info-evento'>
-                                    <h3>Proprietário :</h3>
-                                    <p>{inscricao.evento?.proprietario?.nome}</p>
-                                </div>
-
                                 <div className='evento-sub'>
                                 <button className='cancel-button'
                                     onClick={() => {
                                         if (window.confirm("Tem certeza que deseja cancelar a inscrição?")) {
-                                        handleCancelarInscricao(inscricao.evento?.id!);
+                                            handleCancelarInscricao(inscricao.evento?.id!);
                                         }
                                     }}>
                                     Cancelar Inscrição

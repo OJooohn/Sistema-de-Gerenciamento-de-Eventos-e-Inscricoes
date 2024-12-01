@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Evento } from "../../models/Evento";
 import '../global/StyleForms.css';
+import { Usuario } from "../../models/Usuario";
 
 function EditarEvento() {
     const navigate = useNavigate();
@@ -10,6 +11,8 @@ function EditarEvento() {
     const [mensagem, setMensagem] = useState('');
 
     const usuarioID = JSON.parse(localStorage.getItem('usuario')?.toString() || '{}').id;
+    const [usuario, setUsuario] = useState<Usuario>();
+
     const eventoID = useParams().id;
 
     const [nome, setNome] = useState('');
@@ -19,8 +22,27 @@ function EditarEvento() {
 
     const minDateTime = new Date().toISOString().slice(0, 16);
 
+    const fetchUsuario = () => {
+        axios.get(`http://localhost:5136/sistema/usuario/basico/buscarID/${usuarioID}`)
+        .then((response) => {
+            if (response.status === 200) {
+                if (response.data.perfil != 'Organizador') {
+                    navigate('/sistema/dashboard');
+                    return;
+                }
+
+                setUsuario(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    };
+
     useEffect(() => {
-        axios.get(`http://localhost:5136/sistema/evento/buscar/` + eventoID)
+        fetchUsuario();
+
+        axios.get(`http://localhost:5136/sistema/evento/buscar/${eventoID}`)
             .then((response) => {
                 if (response.status === 200) {
                     setNome(response.data.nome);
@@ -33,7 +55,7 @@ function EditarEvento() {
                 console.error(error);
                 setMensagem('Erro ao buscar evento');
             });
-    }, [eventoID]);
+    }, [usuarioID]);
 
     function handleEditarEvento(e : React.FormEvent) {
         e.preventDefault();

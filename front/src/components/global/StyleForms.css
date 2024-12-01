@@ -126,6 +126,10 @@
     outline: none;
 }
 
+.form-card form input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
 .form-card form select {
     padding: 0.5rem;
     margin-bottom: 1rem;

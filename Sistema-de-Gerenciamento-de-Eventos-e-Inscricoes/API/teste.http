@@ -11,6 +11,9 @@ GET {{baseUrl}}/usuario/listar
 #### Consultar Usuario por Email
 GET {{baseUrl}}/usuario/buscar/{Email Usuario}
 
+###
+GET {{baseUrl}}/usuario/basico/buscarID/3
+
 #### Registrar Usuário
 POST {{baseUrl}}/usuario/registrar
 Content-Type: application/json

@@ -17,33 +17,45 @@ function NavBar() {
         <div className="nav-bar">
             <div className="left-side">
                 <Link to="/">
-                    <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo"></img>
+                    <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo" />
                 </Link>
-                <Link to="/"><h1>Univent</h1></Link>
+                <Link to="/" className="logo-text">
+                    <h1>Univent</h1>
+                </Link>
             </div>
             <div className="right-side">
                 <ul>
                     {!isLogged ? (
-                    <>
-                        <li>
-                            <Link className="btn btn-irado" to="/sistema/usuario/cadastrar">Cadastrar</Link>
-                        </li>
-                        <li>
-                            <Link className="btn btn-simples" to="/sistema/usuario/login">Login</Link>
-                        </li>
-                    </>
+                        <>
+                            <li>
+                                <Link className="btn btn-secondary" to="/sistema/usuario/cadastrar">
+                                    Cadastrar
+                                </Link>
+                            </li>
+                            <li>
+                                <Link className="btn btn-primary" to="/sistema/usuario/login">
+                                    Login
+                                </Link>
+                            </li>
+                        </>
                     ) : (
-                    <>
-                        <li>
-                            <Link className="btn btn-simples" to="/sistema/dashboard">Dashboard</Link>
-                        </li>
-                        <li>
-                            <button className="btn btn-simples" onClick={handleLogout}>Logout</button>
-                        </li>
-                        <li>
-                            <Link className="btn btn-simples" to="/sistema/usuario/perfil">Perfil</Link>
-                        </li>
-                    </>
+                        <>
+                            <li>
+                                <Link className="btn btn-secondary" to="/sistema/dashboard">
+                                    Dashboard
+                                </Link>
+                            </li>
+                            <li>
+                                <button className="btn btn-danger" onClick={handleLogout}>
+                                    Logout
+                                </button>
+                            </li>
+                            <li>
+                                <Link className="btn btn-primary" to="/sistema/usuario/perfil">
+                                    Perfil
+                                </Link>
+                            </li>
+                        </>
                     )}
                 </ul>
             </div>

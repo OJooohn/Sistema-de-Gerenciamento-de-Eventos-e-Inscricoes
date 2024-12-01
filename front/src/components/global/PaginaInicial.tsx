@@ -1,12 +1,18 @@
 import { FaCuttlefish, FaDatabase, FaReact } from 'react-icons/fa';
 import './PaginaInicial.css';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Usuario } from '../../models/Usuario';
 
 function PaginaInicial() {
 
     const navigate = useNavigate();
 
     const isLogged = Boolean(JSON.parse(localStorage.getItem('usuario') || '{}').id);
+
+    const usuarioID = JSON.parse(localStorage.getItem('usuario') || '{}').id;
+    const [usuario, setUsuario] = useState<Usuario>();
 
     const beneficios = [
         "Gestão eficiente de eventos",
@@ -16,8 +22,26 @@ function PaginaInicial() {
         "Segurança e confiabilidade"
     ];
 
+    useEffect(() => {
+        if(!usuarioID) return;
+
+        axios.get(`http://localhost:5136/sistema/usuario/basico/buscarID/${usuarioID}`)
+            .then((response) => {
+                if(response.status === 200)
+                    setUsuario(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, [usuarioID]);
+
     function handleCriarEventoPage() {
         if(isLogged) {
+            if(usuario?.perfil === 'Participante') {
+                alert('Apenas organizadores podem criar eventos');
+                return;
+            }
+
             navigate('/sistema/evento/criar');
         } else {
             alert('Faça login para criar um evento');

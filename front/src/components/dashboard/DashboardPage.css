@@ -56,20 +56,35 @@
 
 .dashboard-buttons a {
     text-decoration: none;
-    color: #3eb9a4;
-    font-size: 1.2rem;
 
-    border: #3eb9a4 1px solid;
+    font-family: 'Kanit', sans-serif;
+    font-size: 1rem;
+    min-width: 18%;
+    
+    background-color: transparent;
+    border: #5bc0de 1px solid;
+    color: #fff;
 
-    padding: 3px 15px;
-    border-radius: 20px;
-
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    border-radius: 10px;
+    padding: 5px 10px;
+    
+    cursor: pointer;
+    
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.2s ease;
 }
 
 .dashboard-buttons a:hover {
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    background-color: #5bc0de;
+    color: #ffffff;
+    
+    transform: scale(1.05);
+}
 
-    background-color: #3eb9a4;
-    color: #FFFFFF;
+.dashboard-buttons a:active {
+    transform: scale(0.95);
+}
+
+.dashboard-buttons a:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(91, 192, 222, 0.5);
 }

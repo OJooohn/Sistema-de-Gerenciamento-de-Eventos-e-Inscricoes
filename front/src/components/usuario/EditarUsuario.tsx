@@ -90,8 +90,8 @@ function EditarUsuario() {
                     <input type="password" name="senha" id="senha" required placeholder='Confime sua senha' autoComplete='current-password' onChange={(e) => setSenhaDigitada(e.target.value)}/>
 
                     <div className="form-buttons">
-                        <button className="cancel-btn" type="button" onClick={() => navigate('/login')}>Cancelar</button>
-                        <button className="submit-btn" type="submit">EDITAR</button>
+                        <button className="cancel-btn" type="button" onClick={() => navigate('/sistema/usuario/perfil')}>Cancelar</button>
+                        <button className="submit-btn" type="submit">Editar</button>
                     </div>
                 </form>
             </div>

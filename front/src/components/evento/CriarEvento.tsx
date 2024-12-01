@@ -22,9 +22,19 @@ function CriarEvento() {
     const minDateTime = new Date().toISOString().slice(0, 16);
 
     useEffect(() => {
-        axios.get(`http://localhost:5136/sistema/usuario/basico/buscarID/` + usuarioID)
+        if (!usuarioID) {
+            navigate('/sistema/usuario/login');
+            return;
+        }
+
+        axios.get(`http://localhost:5136/sistema/usuario/basico/buscarID/${usuarioID}`)
             .then((response) => {
                 if (response.status === 200) {
+                    if(response.data.perfil != 'Organizador') {
+                        navigate('/sistema/dashboard');
+                        return;
+                    }
+
                     setUsuario(response.data);
                 }
             })
